@@ -356,6 +356,7 @@ GameObject:
   - component: {fileID: 842879433}
   - component: {fileID: 842879432}
   - component: {fileID: 842879431}
+  - component: {fileID: 842879434}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -409,6 +410,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &842879434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 842879430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a29e4c087e509d54b8dcf3a0fc73eb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1000362964
 GameObject:
   m_ObjectHideFlags: 0
