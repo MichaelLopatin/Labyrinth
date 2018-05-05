@@ -12,14 +12,14 @@ public class ZombieMovement : MonoBehaviour
     [SerializeField] GameObject bat;
     private Transform batTransform;
 
-    private bool isMoving = false;
- //   private bool isLooking = false;
+    private bool isWalking = false;
+    private bool isRuning = false;
     private bool isAttacking = false;
 
 
     private float walkSpeed = 3f;
     private float runSpeed = 6f;
-    private float attackSpeed = 0.5f;
+    private float attackSpeed = 0f;
     private float idleSpeed = 0f;
 
     private float squareDistance;
@@ -42,7 +42,7 @@ public class ZombieMovement : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
             print(zombieNavMesh.destination);
         }
@@ -67,32 +67,30 @@ public class ZombieMovement : MonoBehaviour
     {
         while (true)
         {
-
-
             squareDistance = SquareDistancePlaneXZ(playerTransform.position, zombieTransform.position);
 
             if (squareDistance <= squareDistanceAttack)
             {
-                zombieNavMesh.isStopped = true;
-                print(" <= squareDistanceAttack");
+                isWalking = false;
+                isRuning = false;
+                zombieNavMesh.speed = attackSpeed;
                 if (!isAttacking)
                 {
-                    print(" <= squareDistanceAttack  !isAttacking");
+                    zombieNavMesh.isStopped = true;
                     isAttacking = true;
-                        StartCoroutine(AttackTarget());
-                   
-                    zombieNavMesh.speed = attackSpeed;
+                    StartCoroutine(AttackTarget());
+                    StartCoroutine(LookAtPlayer());
+       // зачем?             zombieNavMesh.speed = attackSpeed;
                 }
-                isMoving = false;
             }
             else if (squareDistance <= squareDistanceRun)
             {
                 isAttacking = false;
+                isWalking = false;
                 zombieNavMesh.isStopped = false;
-                if (!isMoving)
+                if (!isRuning)
                 {
-                    print(" <= squareDistanceRun");
-                    isMoving = true;
+                    isRuning = true;
                     StartCoroutine(MoveToTheTarget());
                     zombieNavMesh.speed = runSpeed;
                 }
@@ -101,33 +99,30 @@ public class ZombieMovement : MonoBehaviour
             {
                 zombieNavMesh.isStopped = false;
                 isAttacking = false;
-                print(" <= squareDistanceWalk");
-                if (!isMoving)
+                isRuning = false;
+                if (!isWalking)
                 {
-                    isMoving = true;
+                    isWalking = true;
                     StartCoroutine(MoveToTheTarget());
                     zombieNavMesh.speed = walkSpeed;
                 }
             }
-            else 
+            else
             {
                 zombieNavMesh.isStopped = true;
                 isAttacking = false;
-                isMoving = false;
-                print(" <= squareDistanceWalk");
+                isWalking = false;
+                isRuning = false;
             }
             yield return null;
         }
     }
 
-
-
     private IEnumerator MoveToTheTarget()
     {
-        print("go to the target");
         while (true)
         {
-            if (!isMoving)
+            if (!isWalking&&!isRuning)
             {
                 yield break;
             }
@@ -139,9 +134,9 @@ public class ZombieMovement : MonoBehaviour
 
     private IEnumerator AttackTarget()
     {
-        
+
         float ttt = 0;// сделать по другому
-        StartCoroutine(LookAtPlayer());
+
         while (true)
         {
 
@@ -166,23 +161,22 @@ public class ZombieMovement : MonoBehaviour
 
             }
             ttt = 0;
-            
+
             yield return new WaitForSeconds(0.5f);
-          //  StopCoroutine(LookAtPlayer());
         }
     }
- 
+
     private IEnumerator LookAtPlayer()
     {
-        while(true)
+        while (true)
         {
             if (!isAttacking)
             {
                 yield break;
             }
             zombieTransform.LookAt(playerTransform);
-        yield return null;
+            yield return null;
         }
     }
- 
+
 }
