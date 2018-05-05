@@ -45,10 +45,10 @@ public class GhostMovement : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetMouseButton(1))
-        {
-            print(squareDistance);
-        }
+        //if(Input.GetMouseButton(1))
+        //{
+        //    print(squareDistance);
+        //}
 
     }
 
