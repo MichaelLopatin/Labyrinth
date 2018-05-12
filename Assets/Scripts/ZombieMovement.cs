@@ -17,15 +17,15 @@ public class ZombieMovement : MonoBehaviour
     private bool isAttacking = false;
 
 
-    private float walkSpeed = 2f;
+    private float walkSpeed = 3f;
     private float runSpeed = 6f;
     private float attackSpeed = 0f;
     private float idleSpeed = 0f;
 
     private float squareDistance;
-    private float squareDistanceAttack = 9;
+    private float squareDistanceAttack = 4;
     private float squareDistanceWalk = 625;
-    private float squareDistanceRun = 49;
+    private float squareDistanceRun = 25;
 
     private void Awake()
     {
@@ -44,8 +44,7 @@ public class ZombieMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            print("zombieNavMesh.destination "+zombieNavMesh.destination);
-            print("squareDistance " + squareDistance);
+            print(zombieNavMesh.destination);
         }
     }
 
@@ -81,7 +80,7 @@ public class ZombieMovement : MonoBehaviour
                     isAttacking = true;
                     StartCoroutine(AttackTarget());
                     StartCoroutine(LookAtPlayer());
-       zombieNavMesh.speed = attackSpeed;
+       // зачем?             zombieNavMesh.speed = attackSpeed;
                 }
             }
             else if (squareDistance <= squareDistanceRun)
