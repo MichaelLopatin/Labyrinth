@@ -27,7 +27,7 @@ public class MovementTest : MonoBehaviour
         playerCharacterController = this.GetComponent<CharacterController>();
         cameraTransform = playerCam.transform;
         moveSpeed = 10;
-        rotationSpeed = 100;
+        rotationSpeed = 50;
         gravity = 10;
     }
 

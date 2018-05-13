@@ -17,15 +17,15 @@ public class ZombieMovement : MonoBehaviour
     private bool isAttacking = false;
 
 
-    private float walkSpeed = 3f;
+    private float walkSpeed = 2f;
     private float runSpeed = 6f;
     private float attackSpeed = 0f;
     private float idleSpeed = 0f;
 
     private float squareDistance;
-    private float squareDistanceAttack = 4;
+    private float squareDistanceAttack = 9;
     private float squareDistanceWalk = 625;
-    private float squareDistanceRun = 25;
+    private float squareDistanceRun = 49;
 
     private void Awake()
     {
@@ -80,7 +80,7 @@ public class ZombieMovement : MonoBehaviour
                     isAttacking = true;
                     StartCoroutine(AttackTarget());
                     StartCoroutine(LookAtPlayer());
-       // зачем?             zombieNavMesh.speed = attackSpeed;
+        zombieNavMesh.speed = attackSpeed;
                 }
             }
             else if (squareDistance <= squareDistanceRun)
@@ -135,7 +135,7 @@ public class ZombieMovement : MonoBehaviour
     private IEnumerator AttackTarget()
     {
 
-        float ttt = 0;// сделать по другому
+        float ttt = 0;// сделать по другому, т.к. идет смещение палки и невозврат на старую позицию
 
         while (true)
         {
