@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeWeapon : MonoBehaviour 
-{
-    public delegate void DemageFromBullet(WeaponType weapon);
-    public event DemageFromBullet DemageFromBulletEvent;
 
     public enum WeaponType
     {
@@ -15,12 +11,24 @@ public class ChangeWeapon : MonoBehaviour
         rocketLauncher
     }
 
+
+public class ChangeWeapon : MonoBehaviour 
+{
+    public delegate void CurentWeapon(WeaponType weapon);
+    public static event CurentWeapon CurentWeaponEvent;
+
+
+
     private WeaponType curentWeapon;
     private WeaponType lastWeapon;
 
     private void Start()
     {
         curentWeapon = lastWeapon = WeaponType.pistol;
+        if (CurentWeaponEvent != null)
+        {
+            CurentWeaponEvent(curentWeapon);
+        }
     }
 
     private void Update()
@@ -44,9 +52,9 @@ public class ChangeWeapon : MonoBehaviour
         if (lastWeapon != curentWeapon)
         {
             lastWeapon = curentWeapon;
-            if (DemageFromBulletEvent != null)
+            if (CurentWeaponEvent != null)
             {
-                DemageFromBulletEvent(curentWeapon);
+                CurentWeaponEvent(curentWeapon);
             }
         }
     }
