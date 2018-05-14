@@ -4,21 +4,35 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
-    private WeaponType curentWeapon;
+    public WeaponType curentWeapon;
     private WeaponType delayChangeWeapon;
-    private bool isShooting = false;
+    public bool isShooting = false;
+
+    [SerializeField] private Camera playerCamera;
+    private Transform playerCameraTransform;
+
+    private float pistolReloadTime = 0.5f;
+    private float machineGunReloadTime = 0.2f;
+    private float shotgunReloadTime = 1f;
+    private float rocketReloadTime = 3f;
+
+    private IEnumerator fireCoroutine;
 
     private enum Damage
     {
-        pistol=20,
-        machineGun=20,
-        shotgunPellet=5,
-        rocket=80,
-        rocketSplinter=50
+        pistol = 20,
+        machineGun = 20,
+        shotgunPellet = 5,
+        rocket = 80,
+        rocketSplinter = 50
     }
+
+
+
     private void Awake()
     {
         curentWeapon = delayChangeWeapon = WeaponType.pistol;
+        playerCameraTransform = playerCamera.transform;
     }
 
     private void OnEnable()
@@ -34,9 +48,9 @@ public class Shooting : MonoBehaviour
 
     private void CurentWeapon(WeaponType weapon)
     {
-        if(!isShooting)
+        if (!isShooting)
         {
-        curentWeapon = weapon;
+            curentWeapon = weapon;
             delayChangeWeapon = weapon;
         }
         else
@@ -49,66 +63,75 @@ public class Shooting : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && !isShooting)
         {
+            print("GetButtonDown");
             switch (curentWeapon)
             {
                 case WeaponType.pistol:
-                    StartCoroutine(PistolShootingCoroutine());
+                    fireCoroutine = PistolShootingCoroutine(pistolReloadTime);
                     break;
                 case WeaponType.machineGun:
-                    StartCoroutine(MachineGunShootingCoroutine());
+                    fireCoroutine = MachineGunShootingCoroutine(machineGunReloadTime);
                     break;
                 case WeaponType.shotgun:
-                    StartCoroutine(ShotgunShootingCoroutine());
+                    fireCoroutine = ShotgunShootingCoroutine(shotgunReloadTime);
                     break;
                 case WeaponType.rocketLauncher:
-                    StartCoroutine(RocketLauncherShootingCoroutine());
+                    fireCoroutine = RocketLauncherShootingCoroutine(rocketReloadTime);
                     break;
                 default:
                     break;
             }
+            print(" StartCoroutine(fire) ");
+            StartCoroutine(fireCoroutine);
             isShooting = true;
         }
-        if (Input.GetButtonUp("Fire1") && isShooting)
+        else if (Input.GetButtonUp("Fire1"))
         {
-            switch(curentWeapon)
-            {
-                case WeaponType.pistol:
-                    StopCoroutine(PistolShootingCoroutine());
-                    break;
-                case WeaponType.machineGun:
-                    StopCoroutine(MachineGunShootingCoroutine());
-                    break;
-                case WeaponType.shotgun:
-                    StopCoroutine(ShotgunShootingCoroutine());
-                    break;
-                case WeaponType.rocketLauncher:
-                    StopCoroutine(RocketLauncherShootingCoroutine());
-                    break;
-                default:
-                    break;
-            }
+            print(" StopCoroutine(fire) ");
+            StopCoroutine(fireCoroutine);
             isShooting = false;
+            if (curentWeapon != delayChangeWeapon)
+            {
+                curentWeapon = delayChangeWeapon;
+            }
         }
+
     }
 
-    private IEnumerator PistolShootingCoroutine()
+    private IEnumerator PistolShootingCoroutine(float waitTime)
     {
+        yield return null;
+        Vector3 shotDirection;
+        RaycastHit rayHit;
 
-        yield return new WaitForSeconds(0.5f);
+        while (true)
+        {
+            print("корутина работает");
+            shotDirection = playerCameraTransform.TransformDirection(Vector3.forward);
+            //  Debug.DrawRay(playerCameraTransform.position, shotDirection);
+            if (Physics.Raycast(playerCameraTransform.position, shotDirection, out rayHit, 100))
+            {
+                //   print(rayHit.collider.name);
+
+            }
+            yield return new WaitForSeconds(waitTime);
+        }
+
+
     }
-    private IEnumerator MachineGunShootingCoroutine()
+    private IEnumerator MachineGunShootingCoroutine(float waitTime)
     {
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(waitTime);
     }
-    private IEnumerator ShotgunShootingCoroutine()
+    private IEnumerator ShotgunShootingCoroutine(float waitTime)
     {
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(waitTime);
     }
-    private IEnumerator RocketLauncherShootingCoroutine()
+    private IEnumerator RocketLauncherShootingCoroutine(float waitTime)
     {
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(waitTime);
     }
 }
