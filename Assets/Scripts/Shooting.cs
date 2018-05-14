@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
+    public delegate void GetDamage(int damage);
+    public static event GetDamage GetDamageEvent;
+
     public WeaponType curentWeapon;
     private WeaponType delayChangeWeapon;
     public bool isShooting = false;
@@ -16,6 +19,9 @@ public class Shooting : MonoBehaviour
     private float shotgunReloadTime = 1f;
     private float rocketReloadTime = 3f;
 
+   private Weapon pistol;
+    private Weapon machineGun;
+
     private IEnumerator fireCoroutine;
 
     private enum Damage
@@ -27,12 +33,24 @@ public class Shooting : MonoBehaviour
         rocketSplinter = 50
     }
 
+    private struct Weapon
+    {
+      public  float reloadTime;
+        int damage;
+        public Weapon(float reloadTime, int damage)
+        {
+            this.reloadTime = reloadTime;
+            this.damage = damage;
+        }
+    }
 
 
     private void Awake()
     {
         curentWeapon = delayChangeWeapon = WeaponType.pistol;
         playerCameraTransform = playerCamera.transform;
+        pistol = new Weapon(0.5f, 15);
+        machineGun = new Weapon(0.2f, 15);
     }
 
     private void OnEnable()
@@ -63,11 +81,10 @@ public class Shooting : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && !isShooting)
         {
-            print("GetButtonDown");
             switch (curentWeapon)
             {
                 case WeaponType.pistol:
-                    fireCoroutine = PistolShootingCoroutine(pistolReloadTime);
+                    fireCoroutine = PistolShootingCoroutine(pistol.reloadTime);
                     break;
                 case WeaponType.machineGun:
                     fireCoroutine = MachineGunShootingCoroutine(machineGunReloadTime);
@@ -81,13 +98,11 @@ public class Shooting : MonoBehaviour
                 default:
                     break;
             }
-            print(" StartCoroutine(fire) ");
             StartCoroutine(fireCoroutine);
             isShooting = true;
         }
         else if (Input.GetButtonUp("Fire1"))
         {
-            print(" StopCoroutine(fire) ");
             StopCoroutine(fireCoroutine);
             isShooting = false;
             if (curentWeapon != delayChangeWeapon)
@@ -106,13 +121,18 @@ public class Shooting : MonoBehaviour
 
         while (true)
         {
-            print("корутина работает");
             shotDirection = playerCameraTransform.TransformDirection(Vector3.forward);
             //  Debug.DrawRay(playerCameraTransform.position, shotDirection);
             if (Physics.Raycast(playerCameraTransform.position, shotDirection, out rayHit, 100))
             {
+                if (rayHit.collider.CompareTag("TagEnemy"))
+                {
+                    if (GetDamageEvent != null)
+                    {
+                        GetDamageEvent(1);
+                    }
+                }
                 //   print(rayHit.collider.name);
-
             }
             yield return new WaitForSeconds(waitTime);
         }

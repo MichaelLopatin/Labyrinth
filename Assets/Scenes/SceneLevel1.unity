@@ -776,6 +776,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b91356c9e5028cc43b31f3a3b6d9f0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curentWeapon: 0
+  isShooting: 0
   playerCamera: {fileID: 282825403}
 --- !u!114 &842879436
 MonoBehaviour:
@@ -1322,6 +1324,10 @@ Prefab:
         type: 2}
       propertyPath: m_StoppingDistance
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384113692849798, guid: f1e9cd781080ddb49a461baccc80e947, type: 2}
+      propertyPath: m_TagString
+      value: TagEnemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f1e9cd781080ddb49a461baccc80e947, type: 2}
@@ -2009,6 +2015,10 @@ Prefab:
     - target: {fileID: 4458048317121578, guid: 7bcd10aa0107a304585829362a193d7d, type: 2}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1378001391952022, guid: 7bcd10aa0107a304585829362a193d7d, type: 2}
+      propertyPath: m_TagString
+      value: TagEnemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7bcd10aa0107a304585829362a193d7d, type: 2}
